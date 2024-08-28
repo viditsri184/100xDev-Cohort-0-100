@@ -20,7 +20,7 @@ setTimeout(() => {
     console.log(`Time elapsed: ${timeElapsed} ms`);
 }, 1000);
 
-// question 3 : Create a terminal clock (HH:MM:SS)
+// question 3 : Create a termi nal clock (HH:MM:SS)
 
 function displayClock(){
     const now = new Date();
