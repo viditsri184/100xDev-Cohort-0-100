@@ -1,0 +1,3 @@
+Hi there from file.txt. This is a demo file created to just
+test the async function in js fs.readfile and nothing else!
+ThankYou.
