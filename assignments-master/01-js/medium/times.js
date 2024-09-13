@@ -9,14 +9,13 @@ There is no automated test for this one, this is more for you to understand time
 */
 
 function calculateTime(n) {
-    let beforeTime = new Date().getTime();
-    let a = 0;
-    for(let i = 1 ; i <= n ; i++){
-        a = a + i;
+    const startTime = new Date().getTime();
+    let endNumber = 0;
+    for (let index = 0; index <= n; index++) {
+        endNumber = endNumber + index;
     }
-    console.log("Sum = " + a);
-    let afterTime = new Date().getTime();
-    return afterTime - beforeTime;
+    const endTime = new Date().getTime();
+    return `${endTime - startTime} milliseconds`;
 }
 
 
