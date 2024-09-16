@@ -1,0 +1,205 @@
+What is Git ?
+
+Free and open source version control system
+----------------------------------------------------------------------------------------
+What is Version Control System ?
+
+1. A system that keeps track of our files or projects.
+2. It allows you to revert selected files to a previous state, revert the entire project to
+a previous state, compare changes over time, see who last modified something so that we can know what might be causing a problem, or what is the issue, who made it, and when with
+the details.
+
+-----------------------------------------------------------------------------------------
+2 Types of VSC : 
+a . Centralized :- Helps you backup, track and synchronize files. Eg : Subversion and Team foundation server
+
+b . Distributed :- Eg. Git and Mercurial
+----------------------------------------------------------------------------------------
+Why Git ? 
+* Free
+* Open Source 
+* Scalable
+* Super fast
+* Cheap branching and merging
+
+-----------------------------------------------------------------------------------------
+What is GitHub ? 
+
+GitHub is a web-based hosting service for git repositories.
+You can use git without GitHub, but you cannot use GitHub without Git.
+
+-----------------------------------------------------------------------------------------
+           Git                                                     GitHub
+Used for Version Control			    Used for hosting Git repositories
+Installed locally on computer			    Cloud based
+Tracks changes made to a file			    Provides a web interface to view file
+						    changes
+------------------------------------------------------------------------------------------
+
+Local Repository : 
+Every VCS tool provides a private workplace as a working copy. Developers make changes in their private workplace and after commit, these changes becomes a part of the repository.
+Git takes it one step further by providing them a private copy of the whole repository. Users can perform operations with this repository such as add file, remove file, rename file, move file, commit changes, and many more.
+
+-----------------------------------------------------------------------------------------
+
+Working Directory and Staging area Or Index : An intermediate area where commits can be formatted and reviewed before completing the commit.
+
+-----------------------------------------------------------------------------------------
+
+Push : Send a change to another repository (may require permission)
+Pull : Grab a change from a repository
+
+-----------------------------------------------------------------------------------------
+
+Basic workflow of Git : 
+
+Step 1 : You modify a file from the working directory.
+Step 2 : You add these files to the staging area.
+Step 3 : You perform commit operation that moves the files from the staging area. After push operation, it stores the changes permanently to the Git repository.
+
+------------------------------------------------------------------------------------------
+
+Blobs : Blob stands for Binary Large Object. Each version of a file is represented by blob.
+A blob holds the file data but doesn't contains any metadata about the file. It is a binary
+file, and in Git database, it is names as SHA 1 hash of that file. In Git, files are not addressed by names. Everything is content-addressed.
+
+Trees : Tree is an object, which represents a directory. It holds blobs as well as other sub-directories. A tree is a binary file that stores references to blobs and trees are also
+names as SHA 1 hash of the tree object.
+
+-------------------------------------------------------------------------------------------
+
+Commits :
+
+* Commit holds the current state of the repository. A commit is also named by SHA 1 hash
+* Commit object = a node of the linked list
+* Every commit object has a pointer to the parent commit object
+* From a given commit, you can traverse back by looking at the parent pointer to view the history of the commit.
+* If a commit has multiple parent commits, then that particular commit has been created by merging two branches.
+
+-------------------------------------------------------------------------------------------
+
+Git Commands : 
+
+Clone : Bring a repository hosted somewhere like GitHub into a folder or your local machine
+
+Add : Track your files and changes in Git.
+
+Commit : Save your files in git.
+
+Push : Upload your commits to a git repo, like GitHub.
+
+Pull : Download changes from a remote repository to your local repository.
+
+git init : Initialize a git repository in the current directory, where it is run
+
+git status : We can see what's the current status of the git repository
+
+git add . : git add . adds all the current untracked files in the staging area to be ready to commit
+
+git rm --cached <files> : this command can be used to unstage some files which we do want to stage right now and had been staged by mistake
+
+git commit -m "message" : This command is used to commit the changes in to the repository that were in the staging area. It's always advised to have a relevant message for each commit so that everyone working on the repo can have information regarding what type of changes were committed in to the repo by anyone.
+
+git remote -v : This command is used to check that whether we have any remote repository to our local repository or not,  If there is it will show that remote repo otherwise it will be blank
+
+git remote add origin <url of the git repo>.git : This command is used to add a remote git repository and able to tell our local git repo that we want to add a remote git repo and push our files to this remote repo defined by the specified url
+Note, Do not forget to add .git after the url of the remote repo otherwise it won't work
+
+git push -u origin <branchname> : Observe in this command we added a -u before the branchname, because in general the git doesn't know to which branch we want to push so we set a upstream using -u and specify the branch name to which we want to push
+
+git push origin master : push all the changes from the origin(Current repo) to the master(branch)
+
+git clone <url of the repo you want to clone> : This command helps to clone any repo into our local environment with all its files and contents.
+
+-------------------------------------------------------------------------------------------
+
+Branching : There's usually a master branch or main branch initially when we create any repo and we usually push our codes to this branch only.
+
+But, say if there are multiple people working on a project and each have different features of the project to work on, then these people cannot directly just build features and push their codes on the main branch, as it can lead to the stable working code resulting in a bugged code and could ruin the whole codebase.
+Hence, we introduce the concepts of branching usually to get rid of this problem.
+Through branching we create different branches according to the requirement and then work separately on those branches and test our codes there, if we are sure that the feature is ready then we can generate a pull req to the main branch and after getting the permission it will be merged with the main branch / master branch.
+
+This way everyone can work on their own set of features without any worry and test their codes on separate branches before merging it with the main codebase.
+
+-------------------------------------------------------------------------------------------
+
+More Git commands : 
+
+git branch : This commands tells us the branches we have currently in our repository with their names
+
+git checkout -b <name of new branch> : This command helps to move around the branches we have in out repository. We have added a -b to create a new branch and move to the new branch as well. Remember we should give a meaningful name to the branch we are creating according to the work required.
+
+git checkout <branchname> : It helps to move from one branch to other branch
+
+git diff <branchname>/<filename> : This command is used to compare what are the changes that have happened across the files. We can check it with a branch as well as file, whatever maybe the requirement be.
+
+git branch -d <branchname> : This command is used to delete the branch we no longer need or has been merged in the main branch already and has no use now.
+It's a good practice to delete the branches we no longer need of.
+
+-------------------------------------------------------------------------------------------
+
+What is a Git merge conflict ? 
+
+Assume there are 2 developers working a git repo. 
+Developer A pull the code from the main branch and Developer B pulls the code as well from the main branch.
+Now Developer A after making some changes push the code to the main branch successfully.
+But after this,if developer B tries to push the code to the main branch, then git wont allow it, because there are already some changes present in the current repository and developer B is trying to push changes which do not have the current version. So, gits get confused and doesnt know what to keep, what to remove or what to retain.
+
+Merge conflicts happen usually at two places : 
+
+1. While starting the merge process : It there are changes in the working directory's stage area for the current project, merging won't start.
+In this case, conflicts happen due to pending changes that need to be stabilized.
+
+2. During the merge process : When there is a conflict between the local branch and the branch being merged.
+Git resolves as much as possible, but there are things that have to be resolved manually in the conflicted files.
+
+
+Merge conflicts : Occasionally, this process doesn't go smoothly.
+
+If you changed the same part of the same file differently in the two branches you're merging, Git won't be able to merge them cleanly. If you fix for feature branch modified the same part of a file as the hotfix branch, you'll get a merge conflict that looks something like this : 
+---------------------------------------------------------------
+git merge iss53
+Auto-merging index.html
+CONFLICT (content): Merge conflict in index.html
+Automatic merge failed; fix conflicts and then commit the result
+----------------------------------------------------------------
+
+Git hasn't automatically created a new merge commit. It has paused the process while you resolve the conflict, if you want to see which files are unmerged at any point after a merge conflict, you can run git status.
+
+Anything that has merge conflicts and hasn't been resolved is listed as conflicts. Git adds standard conflict resolution markers to the files that have conflict and you can open them manually and resolve these conflicts.
+Your file contains a section that looks something like this : 
+
+---------------------------------------------------------
+<<<<<<<<<<<HEAD: index.html
+<div id="footer">contact : email.support@github.com</div>
+============
+<div id="footer">
+	please contact us at support@github.com
+</div>
+>>>>>>>>>>>feature_branch: index.html
+---------------------------------------------------------
+
+The version in HEAD(your master branch, because that was what you checked out when you ran your merge command) is the top part of that block (everything above the ======= ), while the version in your feature_branch looks like everything in the bottom part. In order to resolve the conflict, you have to either choose one side or the other or merge the content yourself. For instance, you might resolve the above conflict by replacing the entire block with this: 
+-----------------------------------------------------
+<div id="footer">
+please contact us at email.support@github.com
+</div>
+-----------------------------------------------------
+
+-------------------------------------------------------------------------------------------
+Git commands to resolve conflicts : 
+
+git log --merge : produce the list of commits that are causing the conflict.
+
+git diff : identify the differences between the states repositories or files.
+
+git checkout : Used to undo the changes made to the file, or for changing branches
+
+git reset --mixed : Used to undo changes to the working directory and staging area
+
+git merge --abort: Helps in exiting the merge process and returning back to the state before the merging began.
+
+git reset : Used at the time of merge conflict to reset the conflicted files to their original state.
+
+-------------------------------------------------------------------------------------------
+
