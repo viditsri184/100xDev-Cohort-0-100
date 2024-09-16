@@ -2,8 +2,10 @@ const express  = require("express");
 const port = 4000;
 const app = express();
 
+// to read data from the body
 app.use(express.json());
 
+// a in memory variable acting as a source of database for us
 const users = [{
     name : "John",
     numberOfKidney : 2,
@@ -63,6 +65,7 @@ const users = [{
 
 // console.log(users[3].kidneys[0].right)
 
+// a helper function to display details of the users
 const displayDetails = ()=>{
     for(let i = 0 ; i < users.length ; i++){
         console.log(`Name : ${users[i]["name"]}`);
@@ -83,29 +86,25 @@ const displayDetails = ()=>{
     }
 }
 
+// helper function to get basic info of the users
 const getInfo = ()=>{
     let res = users.map((user) => {
         const name = user.name;
         const age = user.age;
         const numberOfKidney = user.numberOfKidney;
+        // Count healthy and unhealthy kidneys based on the actual kidney status
         const healthyKidney = user.kidneys.filter(kidney => Object.values(kidney)[0] === true).length;
-        const unHealthyKidney = numberOfKidney - healthyKidney;
+        const unHealthyKidney = user.kidneys.filter(kidney => Object.values(kidney)[0] === false).length;
         let leftKidney = null;
         let rightKidney = null;
-        user.kidneys.forEach((kidney) =>{
-            if(kidney.hasOwnProperty('left') && kidney.hasOwnProperty('right')){
-                leftKidney = user.kidneys[0].left === true ? "Healthy" : "UnHealthy";
-                rightKidney = user.kidneys[1].right === true ? "Healthy" : "UnHealthy";
+        user.kidneys.forEach((kidney) => {
+            if(kidney.hasOwnProperty('left')) {
+                leftKidney = kidney.left === true ? "Healthy" : "UnHealthy";
             }
-            else{
-                if(kidney.hasOwnProperty('left')){
-                    leftKidney = user.kidneys[0].left === true ? "Healthy" : "UnHealthy";
-                }
-                else if(kidney.hasOwnProperty('right')){
-                    rightKidney = user.kidneys[0].right === true ? "Healthy" : "UnHealthy";
-                }
+            if(kidney.hasOwnProperty('right')) {
+                rightKidney = kidney.right === true ? "Healthy" : "UnHealthy";
             }
-        })
+        });
         return {
             name, age, numberOfKidney, healthyKidney,
             unHealthyKidney, leftKidney, rightKidney
@@ -114,45 +113,46 @@ const getInfo = ()=>{
     return res;
 }
 
+// endpoint to get all the info of the patients
 app.get('/', (req, res) => {
     // show all the records of the patients
     let result = getInfo();
     res.json(result);
 });
 
+// endpoint to add kidney to existing user
 app.post('/add', (req, res) => {
-    // user can add a new kidney
     // get the user who want's to add the kidney
     const userName = req.body.userName;
     // get the status of the kidney being added
     const isHealthy = req.body.isHealthy;
-    // get the user from the users array
-    let target = users.filter((user)=>{
-        return user.name === userName;
-    });
+    // get the target user from the users array
+    let target = users.find(user => user.name === userName);
+    if (!target) {
+        return res.status(404).json({ msg: "User not found!" });
+    }
     // get the number of kidney currently the user has
-    let numberOfKidney = target[0].numberOfKidney;
+    let numberOfKidney = target.numberOfKidney;
     // if it is less than 2, allow to add more
     if(numberOfKidney == 0){
-        target[0].kidneys.push({left : isHealthy});
-        target[0].kidneys.push({right : isHealthy});
-        target[0].numberOfKidney = 2;
+        target.kidneys.push({left : isHealthy});
+        target.kidneys.push({right : isHealthy});
+        target.numberOfKidney = 2;
         res.json({msg : "Kidney added successfully!"});
     }
     else if(numberOfKidney == 1){
-        // keep adding until it becomes 2
-        if(target[0].kidneys[0].hasOwnProperty('right')){
-            target[0].kidneys.push({
+        if(target.kidneys[0].hasOwnProperty('right')){
+            target.kidneys.push({
                 left : isHealthy
             });
         }
         else{
-            target[0].kidneys.push({
+            target.kidneys.push({
                 right : isHealthy
             });
         }
         // update the kidney count
-        target[0].numberOfKidney = 2;
+        target.numberOfKidney = 2;
         // just to confirm send a msg
         res.json({msg : "Kidney added successfully!"});
     }
@@ -164,84 +164,65 @@ app.post('/add', (req, res) => {
     }
 });
 
+// endpoint to replace existing unhealthy kidney's with a good one
 app.put('/replace', (req, res) => {
     // get the user who want's to add the kidney
     const userName = req.body.userName;
     // get the user from the users array
-    let target = users.filter((user)=>{
-        return user.name === userName;
-    });
+    let target = users.find(user => user.name === userName);
+    if (!target) {
+        return res.status(404).json({ msg: "User not found!" });
+    }
     // get the number of kidney currently the user has
-    let numberOfKidney = target[0].numberOfKidney;
+    let numberOfKidney = target.numberOfKidney;
     if(numberOfKidney == 0){
         res.status(411).json({
             msg : "You have 0 kidney currently, kindly add some kidney first!"
         });
     }
     else if(numberOfKidney == 1){
-        let kidney = target[0].kidneys[0].left;
-        if(target[0].kidneys[0].hasOwnProperty('right')){
-            target[0].kidneys[0].right = true;
+        if(target.kidneys[0].hasOwnProperty('right')){
+            target.kidneys[0].right = true;
         }
         else{
-            kidney = true;
+            target.kidneys[0].left = true;
         }
-        res.json({
-            msg : "Kidney successfully replaced!"
-        });
+        res.json({msg : "Kidney successfully replaced!"});
     }
+    // if he has 2 kidneys
     else{
-        target[0].kidneys[0].left = true;
-        target[0].kidneys[1].right = true;
-        res.json({
-            msg : "Kidney successfully replaced!"
-        });
+        target.kidneys[0].left = true;
+        target.kidneys[1].right = true;
+        res.json({msg : "Kidney successfully replaced!"});
     }
 });
 
+// endpoint to delete unhealthy kidneys from the patient
 app.delete('/delete', (req, res) => {
     const userName = req.body.userName;
     // get the user from the users array
-    let target = users.filter((user)=>{
-        return user.name === userName;
-    });
-    // get the number of kidney currently the user has
-    let numberOfKidney = target[0].numberOfKidney;
-    if(numberOfKidney < 1){
-        res.status(411).json({msg : "You have no kidneys left to remove!"});
+    let target = users.find(user => user.name === userName);
+    if (!target) {
+        return res.status(404).json({ msg: "User not found!" });
     }
-    else{
-        if(atleastOneUnhealthyKidney() && numberOfKidney == 1){
-            let res = target[0].kidneys.filter((kidney) => {
-                return kidney === true;
-            });
-            target[0].kidneys = res;
-            res.json({msg : "Successfully removed the unhealthy kidney!"});
-        }
-        else if(atleastOneUnhealthyKidney()){
-            let res = target[0].kidneys.filter((kidney) => {
-                return kidney === true;
-            });
-            target[0].kidneys = res;
-            res.json({msg : "Successfully removed the unhealthy kidney!"});
-        }
-        else{
-            res.status(411).json({msg : "No un-healthy kidney to remove!"});
-        }
+
+    if (target.numberOfKidney < 1) {
+        return res.status(411).json({ msg: "You have no kidneys left to remove!" });
+    }
+
+    if (atleastOneUnhealthyKidney(target)) {
+        target.kidneys = target.kidneys.filter(kidney => Object.values(kidney)[0] === true);
+        target.numberOfKidney = target.kidneys.length;
+        return res.json({ msg: "Successfully removed the unhealthy kidney!" });
+    } else {
+        return res.status(411).json({ msg: "No unhealthy kidney to remove!" });
     }
 });
 
-const atleastOneUnhealthyKidney = () => {
-    let atleastOneUnhealthyKidney = false;
-    users.forEach((user) => {
-        user.kidneys.forEach((kidney) => {
-            if(kidney === false){
-                atleastOneUnhealthyKidney = true;
-            }
-        });
-    });
-    return atleastOneUnhealthyKidney;
-}
+// helper function to determine if the target user has atleast one unhealthy kidney or not
+const atleastOneUnhealthyKidney = (user) => {
+    return user.kidneys.some(kidney => Object.values(kidney)[0] === false);
+};
 
 app.listen(port, ()=>{
     console.log(`http://localhost:${port}`);
