@@ -17,5 +17,28 @@ const fs = require('fs');
 const path = require('path');
 const app = express();
 
+app.use(express.json());
+
+app.get("/files", (req, res) => {
+  // path.join is used to combine multiple path segments into one normalized path
+  // __dirname is a global variable in node.js that contains the directory name of the current module
+  fs.readdir(path.join(__dirname, "./files/"), (err, allFiles) => {
+    if (err) return res.status(500).json({ error: "Failed to retrieve files" });
+    res.status(200).json(allFiles);
+  });
+});
+
+app.get("/file/:filename", (req, res) => {
+  const name = req.params.filename;
+  const filepath = path.join(__dirname, "./files/", name);
+  fs.readFile(filepath, "utf8", (err, data) => {
+    if(err) return res.status(404).send("File not found");
+    res.status(200).send(data);
+  });
+});
+
+app.use((req, res) => {
+  res.status(404).send("Route not found");
+});
 
 module.exports = app;
