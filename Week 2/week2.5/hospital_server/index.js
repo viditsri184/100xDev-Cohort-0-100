@@ -134,13 +134,13 @@ app.post('/add', (req, res) => {
     // get the number of kidney currently the user has
     let numberOfKidney = target.numberOfKidney;
     // if it is less than 2, allow to add more
-    if(numberOfKidney == 0){
+    if(numberOfKidney === 0){
         target.kidneys.push({left : isHealthy});
         target.kidneys.push({right : isHealthy});
         target.numberOfKidney = 2;
         res.json({msg : "Kidney added successfully!"});
     }
-    else if(numberOfKidney == 1){
+    else if(numberOfKidney === 1){
         if(target.kidneys[0].hasOwnProperty('right')){
             target.kidneys.push({
                 left : isHealthy
@@ -175,12 +175,12 @@ app.put('/replace', (req, res) => {
     }
     // get the number of kidney currently the user has
     let numberOfKidney = target.numberOfKidney;
-    if(numberOfKidney == 0){
+    if(numberOfKidney === 0){
         res.status(411).json({
             msg : "You have 0 kidney currently, kindly add some kidney first!"
         });
     }
-    else if(numberOfKidney == 1){
+    else if(numberOfKidney === 1){
         if(target.kidneys[0].hasOwnProperty('right')){
             target.kidneys[0].right = true;
         }
@@ -191,8 +191,21 @@ app.put('/replace', (req, res) => {
     }
     // if he has 2 kidneys
     else{
-        target.kidneys[0].left = true;
-        target.kidneys[1].right = true;
+        // target.kidneys[0].left = true;
+        // target.kidneys[1].right = true;
+        if(target.kidneys[0].hasOwnProperty('right')){
+            target.kidneys[0].right = true;
+        }
+        else{
+            target.kidneys[0].left = true;
+        }
+
+        if(target.kidneys[1].hasOwnProperty('right')){
+            target.kidneys[1].right = true;
+        }
+        else{
+            target.kidneys[1].left = true;
+        }
         res.json({msg : "Kidney successfully replaced!"});
     }
 });
