@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bubbling vs Capturing</title>
+</head>
+<style>
+    #myDiv1, #myDiv2{
+        background-color: coral;
+        padding: 50px;
+    }
+
+    #myP1, #myP2{
+        background-color: white;
+        font-size: 20px;
+        border: 1px solid;
+        padding: 20px;
+    }
+</style>
+<body>
+
+    <!-- Event Bubbling or Event Capturing ?  -->
+    <!-- Two ways of event propagation in HTML DOM - bubbling and capturing -->
+    <!-- Event propagation is a way of defining the element order when an event occurs. If you have a <p> element
+        inside a <div> element, and the user clicks on the <p> element, which element's "click" event should be handled first? -->
+
+    <!-- In Bubbling the innermost element's event is handled first and then the outer. The <p> element's click
+        event is handled first, then the <div> element's click event. By default the addEventListener() has bubbling method on -->
+    
+    <!-- In Capturing the outermost element's event is handled first and then the inner. The <div> element's click
+        event is handled first, then the <p> element's click event. By default the addEventListener() has capturing method off
+        to set it on we need to pass the third argument to it as true. -->
+    
+    
+
+    <h2>JavaScript addEventListener()</h2>
+
+    <div id="myDiv1">
+        <h2>Bubbling : </h2>
+        <p id="myP1">Click Me</p>
+    </div><br>
+
+    <div id="myDiv2">
+        <h2>Capturing : </h2>
+        <p id="myP2">Click Me</p>
+    </div><br>
+
+    <script>
+        document.getElementById("myP1").addEventListener("click", function(){
+            alert("You clicked the white element!");
+        }, false);
+
+        document.getElementById("myDiv1").addEventListener("click", function(){
+            alert("You clicked the orange element!");
+        }, false);
+
+        document.getElementById("myP2").addEventListener("click", function(){
+            alert("You clicked the white element!");
+        }, true);
+
+        document.getElementById("myDiv2").addEventListener("click", function(){
+            alert("You clicked the orange element!");
+        }, true);
+
+
+    </script>
+</body>
+</html>
