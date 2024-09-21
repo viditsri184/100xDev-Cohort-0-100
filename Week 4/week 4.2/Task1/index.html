@@ -119,11 +119,14 @@
             const title = document.getElementById("title").value;
             const description = document.getElementById("description").value;
             todoState.push({
-                title: title,
-                description: description,
+                title: title || "Untitled",
+                description: description || "",
                 id: globalId++,
             });
             updateState(todoState);
+
+            document.getElementById("title").value = "";
+            document.getElementById("description").value = "";
         }
     </script>
 </body>
