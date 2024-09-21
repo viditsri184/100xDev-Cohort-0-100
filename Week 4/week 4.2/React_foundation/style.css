@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body{
+    background-color: #f8f9fa;
+}
+
+#navbar{
+    background-color: #e9ecef;
+    box-shadow: -3px -3px 7px #ffffff,
+                    3px 3px 5px #cecece;
+    display: flex;
+    justify-content: space-between;
+}
+
+.logo{
+    display: flex;
+    justify-content: space-between;
+    height: 90px;
+    cursor: pointer;
+    width: 200px;
+}
+
+.title{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #212529;
+    width: 165px;
+    font-weight: 600;
+    font-size: 19px;
+}
+
+.logo img{
+    height: 100%;
+    width: 90%;
+}
+
+.options{
+    display: flex;
+    align-items: center;
+    margin-right: 12%;
+    justify-content: center;
+    width: 350px;
+}
+
+.options ul{
+    list-style: none;
+    font-size: 19px;
+    font-weight: 600;
+    display: flex;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: space-between;
+    color: #212529;
+}
+
+.todos{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.input-box{
+    width: 100%;
+    height: 150px;
+    color: #212529;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.titles{
+    margin: 10px 10px;
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.description{
+    font-weight: 500;
+    font-size: 16px;
+    margin: 1px 10px 2px 10px;
+}
