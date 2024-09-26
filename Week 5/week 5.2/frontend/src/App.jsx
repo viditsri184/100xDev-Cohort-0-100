@@ -2,6 +2,7 @@ import { useState } from 'react'
 import './App.css'
 import { CreateTodo } from './components/CreateTodo'
 import { Todos } from './components/Todos'
+import { Navbar } from './components/Navbar';
 
 function App() {
   const [todo, setTodos] = useState([]);
@@ -18,10 +19,11 @@ function App() {
     }
   }
 
-  fetchTodos()
+  // fetchTodos()
   return (
     <>
       <div>
+        <Navbar></Navbar>
         <CreateTodo></CreateTodo>
         <Todos todos={todo}></Todos>
       </div>

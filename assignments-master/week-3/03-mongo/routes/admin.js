@@ -28,6 +28,7 @@ router.post('/signup', async (req, res) => {
 
 router.post('/courses', adminMiddleware, (req, res) => {
     // Implement course creation logic
+    
 });
 
 router.get('/courses', adminMiddleware, (req, res) => {
