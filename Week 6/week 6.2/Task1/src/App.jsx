@@ -1,8 +1,17 @@
 import { useState, useEffect } from 'react'
 
+/*The 'useEffect' hook is a feature in React, a popular javascript library for building
+use interface. It allows you to perform side effects in function components. Side effects
+are operations that can affect other components or can't be done during rendering, such as
+data fetching, subscriptions, or manually changing the DOM in react components.
+
+The 'useEffect' hook serves the same purpose as 'componentDidMount', 'componentDidUpdate', and
+'componentWillUnmount' in React class Components, but unified into a single API.
+*/
+
 function App() {
   const [id, setId] = useState(1);
-  
+
   return (
     <div>
       <button onClick={function(){
