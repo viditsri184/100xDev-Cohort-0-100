@@ -1,29 +1,22 @@
 import { netWorkAtom, notificationsAtom, messagingAtom, jobsAtom, totalNotificationSelector } from './atoms';
 import './App.css';
 import { RecoilRoot, useRecoilValue } from 'recoil';
-
 function App() {
   return <RecoilRoot>
     <MainApp />
   </RecoilRoot>
 }
-
 function MainApp() {
-
   const networkNotificationCount = useRecoilValue(netWorkAtom);
   const notificationCount = useRecoilValue(notificationsAtom);
   const messageNotificationCount = useRecoilValue(messagingAtom);
   const jobNotificationCount = useRecoilValue(jobsAtom);
-
   // The other way is to use Selectors in recoil
   const totalNotificationCount = useRecoilValue(totalNotificationSelector);
-
-
   // one way to do this useMemo
   // const totalNotificationCount = useMemo(() =>{
   //   return (networkNotificationCount + notificationCount + messageNotificationCount + jobNotificationCount)
   // }, [networkNotificationCount, notificationCount, messageNotificationCount, jobNotificationCount]);
-
   return (
     <div style={styles.container}>
       <button style={styles.buttons}>Home</button>
@@ -33,12 +26,9 @@ function MainApp() {
       <button style={styles.buttons}>Notifications ({notificationCount >= 100 ? "99+" : notificationCount})</button>
       <button style={styles.buttons}>Me ({totalNotificationCount})</button>
     </div>
-
   )
 }
-
 export default App
-
 const styles = {
   container: {
     padding: 5,
