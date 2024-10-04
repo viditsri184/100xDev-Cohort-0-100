@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const argon2 = require("argon2");
 
 require('dotenv').config({ path: './db/.env' });
-const dbURI = process.env.MONGODB_URI
+const dbURI = process.env.MONGODB_URL
     .replace('${MONGODB_USERNAME}', process.env.MONGODB_USERNAME)
     .replace('${MONGODB_PASSWORD}', process.env.MONGODB_PASSWORD);
 // Connect to MongoDB
@@ -50,16 +50,36 @@ UserSchema.methods.validatePassword = async function(candidatePassword){
 }
 
 
-// Create a model from the schema
-const Users = mongoose.model('User', UserSchema);
+/*
+In the real world, you shouldn't store `floats` for balances in the database.
+You usually store an integer which represents the INR value with
+decimal places (for eg, if someone has 33.33 rs in their account,
+you store 3333 in the database).
 
+There is a certain precision that you need to support (which for india is
+2/4 decimal places) and this allows you to get rid of precision
+errors by storing integers in your DB
+*/
+const accountSchema = mongoose.Schema({
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Users',
+        required: true
+    },
+    balance: {
+        type: Number,
+        required: true,
+    }
+});
+
+
+// Create a model from the schema
+const User = mongoose.model('User', UserSchema);
+const Account = mongoose.model('Account', accountSchema);
 
 // Note - We are not hashing passwords before putting them in the database.
 // This is standard practice that should be done, you can find more details here
 // - https://mojoauth.com/blog/hashing-passwords-in-nodejs/
 
 
-
-
-
-module.exports = Users;
+module.exports = {User, Account};

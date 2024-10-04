@@ -1,10 +1,27 @@
 const zod = require("zod");
 
-const usernameSchema= zod.string().email();
-const passwordSchema = zod.string().min(6);
-const firstNameSchema = zod.string();
-const lastNameSchema = zod.string();
+const signUpBody = zod.object({
+    username: zod.string().email(),
+    firstName: zod.string(),
+    lastName: zod.string(),
+    password: zod.string().min(6)
+});
 
-module.exports = {
-    usernameSchema, passwordSchema, firstNameSchema, lastNameSchema
-}
+const signInBody = zod.object({
+    username: zod.string().email(),
+    password: zod.string()
+});
+
+const updateBody = zod.object({
+    password: zod.string().min(6).optional(),
+    firstName: zod.string().optional(),
+    lastName: zod.string().optional(),
+});
+
+const transferBody = zod.object({
+    to: zod.string(),
+    amount: zod.number()
+});
+
+
+module.exports = {signUpBody, signInBody, updateBody, transferBody};
