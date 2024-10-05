@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const { Account } = require("../db/db");
 const {transferBody} = require("../types");
 
-async function getBalance(){
+async function getBalance(req, res){
     const userId = req.userId;
     const account = await Account.findOne({
         userId: userId
@@ -13,7 +13,7 @@ async function getBalance(){
     res.status(200).json({balance: account.balance});
 }
 
-async function transferAmount(){
+async function transferAmount(req, res){
     const session = await mongoose.startSession();
     session.startTransaction();
 
