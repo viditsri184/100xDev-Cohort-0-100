@@ -31,7 +31,7 @@ async function signUpHandler(req, res) {
     // ----- Create new account ------
     await Account.create({
         userId: userId,
-        balance: 1 + Math.random() * 10000
+        balance: Math.floor(Math.random() * 1000000)
     });
     // ----------------------------------
 

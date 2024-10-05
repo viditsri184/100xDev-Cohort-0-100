@@ -23,6 +23,7 @@ async function transferAmount(req, res){
         return res.status(411).json({message: "Invalid input"});
     }
     const senderId = req.userId;
+    const amount = req.body.amount;
     // fetch the sender's account
     const sender = await Account.findOne({userId: senderId}).session(session);
     if(!sender || sender.balance < amount){
@@ -37,7 +38,6 @@ async function transferAmount(req, res){
         return res.status(400).json({message: "Invalid account"});
     }
 
-    const amount = req.body.amount;
     // Perform the transfer
     await Account.findOneAndUpdate({userId: senderId}, {$inc: {balance: -amount}}).session(session);
     await Account.findOneAndUpdate({userId: req.body.to}, {$inc: {balance: amount}}).session(session);
