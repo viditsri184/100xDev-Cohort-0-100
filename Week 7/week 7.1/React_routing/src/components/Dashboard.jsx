@@ -8,6 +8,7 @@ const styles = {
     container: {
         margin:10,
         padding:10,
+        padding:10,
         fontSize:19,
         background:"#8338ec",
         height:370,
