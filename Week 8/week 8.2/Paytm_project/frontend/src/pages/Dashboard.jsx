@@ -7,7 +7,7 @@ export default function Dashboard() {
     return <div>
         <Appbar user={"Vidit"}/>
         <div className="m-8">
-            <Balance amount={"₹40000"}/>
+            <Balance />
             <Users />
         </div>
     </div>
